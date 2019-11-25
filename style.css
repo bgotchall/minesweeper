@@ -1,6 +1,6 @@
 .game_square{
     height:40px;
-    width:30px;
+    width:40px;
     padding:0px;
     padding-top:5px;
     text-align: center;
@@ -86,3 +86,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
+
+/* .game_board{
+   
+} */

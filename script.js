@@ -11,22 +11,102 @@
 
 
 var bomb_density = .2;
-var board_size = 20;
+var board_size = 15;
 var bomb_number = Math.round(board_size * board_size * bomb_density);
 var index = 0;
+var board_array;
 
-var board_array = Create2DArray(board_size, board_size);  //blank
-build_blank_array(board_size);          //initing to zeros
+$(document).ready(function() {
+    start_game();
 
-place_bombs(board_size);                //randomly place bombs
-console.log(board_array);
-console.log(index);
-//debugger;
-place_numbers(board_size);              //numbers
-console.log(board_array);
-build_board(board_size);
+    $(document).on("click",".game_square_closed",function(){
 
+    //$(".game_square_closed").on("click", function () {
 
+        // alert($(this).attr("content"));
+        //console.log(this);
+        $(this).removeClass("game_square_closed");
+        $(this).addClass("game_square");
+    
+        //debugger;
+        var value = $(this).attr("content");
+    
+        switch (value) {
+            case "0":
+                $(this).addClass("open0")
+                break;
+            case "1":
+                $(this).addClass("open1")
+                break;
+            case "2":
+                $(this).addClass("open2")
+                break;
+            case "3":
+                $(this).addClass("open3")
+                break;
+            case "4":
+                $(this).addClass("open4")
+                break;
+            case "5":
+                $(this).addClass("open5")
+                break;
+            case "10":
+                $(this).addClass("open_red_bomb")
+                break;
+            default:
+                break;
+        }
+    
+    
+    })
+    
+    
+        $(document).on("click",".btn-new-game",function(){
+        start_game();
+    
+    
+    })
+    
+    
+    //$(".game_square_closed").on("contextmenu", function () {
+        $(document).on("contextmenu",".game_square_closed",function(){
+        event.preventDefault();  //prevent the browser context menu from popping up
+    
+    
+        if ($(this).attr("flag") == "true") {
+            $(this).attr("flag", false);
+            $(this).attr("question", true);
+            $(this).addClass("closed_question");
+            $(this).removeClass("closed_flag");
+    
+        } else if ($(this).attr("question") == "true") {
+            $(this).attr("flag", false);
+            $(this).attr("question", false);
+            $(this).addClass("closed_question");
+            $(this).removeClass("closed_question");
+    
+        } else {
+            $(this).attr("flag", true);
+            $(this).attr("question", false);
+            $(this).addClass("closed_flag");
+            $(this).removeClass("closed_question");
+    
+        }
+    
+    })
+});
+
+function start_game() {
+    board_array=[];
+    index = 0;
+    board_array = Create2DArray(board_size, board_size);  //blank
+    build_blank_array(board_size);          //initing to zeros
+    place_bombs(board_size);                //randomly place bombs
+    //debugger;
+    place_numbers(board_size);              //numbers
+    build_board(board_size);
+
+}
 
 
 function place_numbers(size) {
@@ -136,13 +216,14 @@ function place_bombs(size) {
 function build_board(size) {
     var new_row;
     var new_square;
-
+    $(".game_board").empty();
     for (var y = 0; y < size; y++) {
         new_row = $("<div></div>");
         $(new_row).addClass("row");
         for (var x = 0; x < size; x++) {
             new_square = $("<div></div>");
             $(new_square).addClass("col game_square_closed game_square");
+            $(new_square).removeClass("open0 open1 open2 open3");
             $(new_square).attr("x", x);
             $(new_square).attr("y", y);
             $(new_square).attr("content", board_array[x][y]);
@@ -178,76 +259,3 @@ function Create2DArray(rows) {
     return arr;
 }
 
-$(".game_square_closed").on("click", function () {
-
-    // alert($(this).attr("content"));
-    //console.log(this);
-    $(this).removeClass("game_square_closed");
-    $(this).addClass("game_square");
-
-    //debugger;
-    var value = $(this).attr("content");
-
-    switch (value) {
-        case "0":
-            $(this).addClass("open0")
-            break;
-        case "1":
-            $(this).addClass("open1")
-            break;
-        case "2":
-            $(this).addClass("open2")
-            break;
-        case "3":
-            $(this).addClass("open3")
-            break;
-        case "4":
-            $(this).addClass("open4")
-            break;
-        case "5":
-            $(this).addClass("open5")
-            break;
-            case "10":
-                $(this).addClass("open_red_bomb")
-                break;
-        default:
-            break;
-    }
-
-    
-})
-
-$(".btn-new-game").on("click", function () {
-    
-    
-
-
-})
-
-
-$(".game_square_closed").on("contextmenu", function () {
-
-    event.preventDefault();  //prevent the browser context menu from popping up
-
-
-   if ($(this).attr("flag")=="true"){
-    $(this).attr("flag",false);
-    $(this).attr("question",true);
-    $(this).addClass("closed_question");
-    $(this).removeClass("closed_flag");
-
-   } else  if ($(this).attr("question")=="true"){
-    $(this).attr("flag",false);
-    $(this).attr("question",false);
-    $(this).addClass("closed_question");
-    $(this).removeClass("closed_question");
-
-} else {
-    $(this).attr("flag",true);
-    $(this).attr("question",false);
-    $(this).addClass("closed_flag");
-    $(this).removeClass("closed_question");
-  
-   }
-
-})
