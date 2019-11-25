@@ -9,3 +9,127 @@
     display: inline-block;
 
 }
+
+.game_square_open{
+    background-color:white;
+    color:black;
+    border: solid 1px black;
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+
+}
+
+.game_square_closed{
+    background-image:url(./resources/closed_16x16.PNG);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+    
+}
+.open0{
+    background-image:url(./resources/open_0_16x16.PNG);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}
+.open1{
+    background-image:url(./resources/open_1_16x16.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.open2{
+    background-image:url(./resources/open_2_16x16.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.open3{
+    background-image:url(./resources/open_3_16x16.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.open4{
+    background-image:url(./resources/open_4_16x16.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.open5{
+    background-image:url(./resources/open_5_16x16.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}
+
+.open_red_bomb{
+    background-image:url(./resources/open_red_bomb.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    /* color:grey;
+    border: solid 1px white; */
+    height:40px;
+    width:30px;
+    padding:0px;
+    padding-top:5px;
+    text-align: center;
+    display: inline-block;
+}

@@ -11,7 +11,7 @@
 
 
 var bomb_density = .2;
-var board_size = 10;
+var board_size = 20;
 var bomb_number = Math.round(board_size * board_size * bomb_density);
 var index = 0;
 
@@ -142,11 +142,11 @@ function build_board(size) {
         $(new_row).addClass("row");
         for (var x = 0; x < size; x++) {
             new_square = $("<div></div>");
-            $(new_square).addClass("col game_square");
+            $(new_square).addClass("col game_square_closed");
             $(new_square).attr("x", x);
             $(new_square).attr("y", y);
             $(new_square).attr("content", board_array[x][y]);
-            $(new_square).text(board_array[x][y]);
+           // $(new_square).text(board_array[x][y]);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -175,3 +175,58 @@ function Create2DArray(rows) {
 
     return arr;
 }
+
+$(".game_square_closed").on("click", function () {
+
+    // alert($(this).attr("content"));
+    console.log(this);
+    $(this).removeClass("game_square_closed");
+
+    //debugger;
+    var value = $(this).attr("content");
+
+    switch (value) {
+        case "0":
+            $(this).addClass("open0")
+            break;
+        case "1":
+            $(this).addClass("open1")
+            break;
+        case "2":
+            $(this).addClass("open2")
+            break;
+        case "3":
+            $(this).addClass("open3")
+            break;
+        case "4":
+            $(this).addClass("open4")
+            break;
+        case "5":
+            $(this).addClass("open5")
+            break;
+            case "10":
+                $(this).addClass("open_red_bomb")
+                break;
+        default:
+            break;
+    }
+
+    
+})
+
+$(".btn-new-game").on("click", function () {
+
+
+
+})
+
+
+$(".game_square_closed").on("contextmenu", function () {
+
+    event.preventDefault();
+
+
+    alert("right");
+
+
+})
