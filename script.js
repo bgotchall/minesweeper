@@ -21,10 +21,10 @@ build_blank_array(board_size);          //initing to zeros
 place_bombs(board_size);                //randomly place bombs
 console.log(board_array);
 console.log(index);
-debugger;
+//debugger;
 place_numbers(board_size);              //numbers
 console.log(board_array);
-
+build_board(board_size);
 
 
 
@@ -40,7 +40,6 @@ function place_numbers(size) {
         for (var x = 0; x < size; x++) {
             if (board_array[x][y] != 10) {
                 count = 0;
-
 
                 if ((x == 0) && (y == 0)) {
                     if (board_array[x][y + 1] == 10) { count++; }
@@ -59,42 +58,29 @@ function place_numbers(size) {
                     if (board_array[x - 1][y + 1] == 10) { count++; }
                     if (board_array[x][y + 1] == 10) { count++; }
                 } else if (x == 0) {
-                    //  if (board_array[x-1][y-1]==10){count++;}
-                    //  if (board_array[x-1][y]==10){count++;}
-                    //  if (board_array[x-1][y+1]==10){count++;}
                     if (board_array[x][y - 1] == 10) { count++; }
                     if (board_array[x][y + 1] == 10) { count++; }
                     if (board_array[x + 1][y - 1] == 10) { count++; }
                     if (board_array[x + 1][y] == 10) { count++; }
                     if (board_array[x + 1][y + 1] == 10) { count++; }
                 } else if (y == 0) {
-                    //   if (board_array[x-1][y-1]==10){count++;}
                     if (board_array[x - 1][y] == 10) { count++; }
                     if (board_array[x - 1][y + 1] == 10) { count++; }
-                    //  if (board_array[x][y-1]==10){count++;}
                     if (board_array[x][y + 1] == 10) { count++; }
-                    //   if (board_array[x+1][y-1]==10){count++;}
                     if (board_array[x + 1][y] == 10) { count++; }
                     if (board_array[x + 1][y + 1] == 10) { count++; }
                 } else if (y == size - 1) {
                     if (board_array[x - 1][y - 1] == 10) { count++; }
                     if (board_array[x - 1][y] == 10) { count++; }
-                    //if (board_array[x-1][y+1]==10){count++;}
                     if (board_array[x][y - 1] == 10) { count++; }
-                    // if (board_array[x][y+1]==10){count++;}
                     if (board_array[x + 1][y - 1] == 10) { count++; }
                     if (board_array[x + 1][y] == 10) { count++; }
-                    //if (board_array[x+1][y+1]==10){count++;}
                 } else if (x == size - 1) {
                     if (board_array[x - 1][y - 1] == 10) { count++; }
                     if (board_array[x - 1][y] == 10) { count++; }
                     if (board_array[x - 1][y + 1] == 10) { count++; }
                     if (board_array[x][y - 1] == 10) { count++; }
                     if (board_array[x][y + 1] == 10) { count++; }
-                    // if (board_array[x+1][y-1]==10){count++;}
-                    // if (board_array[x+1][y]==10){count++;}
-                    // if (board_array[x+1][y+1]==10){count++;}
-
                 } else {
                     if (board_array[x - 1][y - 1] == 10) { count++; }
                     if (board_array[x - 1][y] == 10) { count++; }
@@ -159,6 +145,8 @@ function build_board(size) {
             $(new_square).addClass("col game_square");
             $(new_square).attr("x", x);
             $(new_square).attr("y", y);
+            $(new_square).attr("content", board_array[x][y]);
+            $(new_square).text(board_array[x][y]);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -177,13 +165,6 @@ function createArray(length) {
     return arr;
 }
 
-// createArray();     // [] or new Array()
-
-// createArray(2);    // new Array(2)
-
-// createArray(3, 2); // [new Array(2),
-//                    //  new Array(2),
-//                    //  new Array(2)]
 
 function Create2DArray(rows) {
     var arr = [];
