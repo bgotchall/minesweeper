@@ -1,0 +1,9 @@
+.game_square{
+
+    border: solid 1px black;
+    height:40px;
+    width:30px;
+    padding:0px;
+    display:inline-block;
+
+}

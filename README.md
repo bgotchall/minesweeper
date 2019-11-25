@@ -1,1 +1,3 @@
-# minesweeper
+## prototype
+Minesweeper game
+
