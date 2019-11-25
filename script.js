@@ -142,11 +142,13 @@ function build_board(size) {
         $(new_row).addClass("row");
         for (var x = 0; x < size; x++) {
             new_square = $("<div></div>");
-            $(new_square).addClass("col game_square_closed");
+            $(new_square).addClass("col game_square_closed game_square");
             $(new_square).attr("x", x);
             $(new_square).attr("y", y);
             $(new_square).attr("content", board_array[x][y]);
-           // $(new_square).text(board_array[x][y]);
+            $(new_square).attr("flag", false);
+            $(new_square).attr("question", false);
+            $(new_square).text(board_array[x][y]);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -179,8 +181,9 @@ function Create2DArray(rows) {
 $(".game_square_closed").on("click", function () {
 
     // alert($(this).attr("content"));
-    console.log(this);
+    //console.log(this);
     $(this).removeClass("game_square_closed");
+    $(this).addClass("game_square");
 
     //debugger;
     var value = $(this).attr("content");
@@ -215,7 +218,8 @@ $(".game_square_closed").on("click", function () {
 })
 
 $(".btn-new-game").on("click", function () {
-
+    
+    
 
 
 })
@@ -223,10 +227,27 @@ $(".btn-new-game").on("click", function () {
 
 $(".game_square_closed").on("contextmenu", function () {
 
-    event.preventDefault();
+    event.preventDefault();  //prevent the browser context menu from popping up
 
 
-    alert("right");
+   if ($(this).attr("flag")=="true"){
+    $(this).attr("flag",false);
+    $(this).attr("question",true);
+    $(this).addClass("closed_question");
+    $(this).removeClass("closed_flag");
 
+   } else  if ($(this).attr("question")=="true"){
+    $(this).attr("flag",false);
+    $(this).attr("question",false);
+    $(this).addClass("closed_question");
+    $(this).removeClass("closed_question");
+
+} else {
+    $(this).attr("flag",true);
+    $(this).attr("question",false);
+    $(this).addClass("closed_flag");
+    $(this).removeClass("closed_question");
+  
+   }
 
 })
