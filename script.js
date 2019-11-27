@@ -13,91 +13,111 @@
 var bomb_density = .2;
 var board_size = 15;
 var bomb_number = Math.round(board_size * board_size * bomb_density);
+var bomb_count;         //in this imp the actual number might vary
+var blanks_count;       //once all the squares are opened except for bombs, you win.
 var index = 0;
 var board_array;
+var game_running = true;              //false if you have died.
 
-$(document).ready(function() {
+$(document).ready(function () {
+
     start_game();
 
-    $(document).on("click",".game_square_closed",function(){
+    $(document).on("click", ".game_square_closed", function () {
+        if (game_running) {
+            //blanks_count++;
+            $(this).removeClass("game_square_closed");
+            $(this).addClass("game_square");
 
-    //$(".game_square_closed").on("click", function () {
+            // debugger;
+            var value = $(this).attr("content");
+            if (value != "10") { blanks_count--; }
+            if (blanks_count == 0) {
+                //here the revealed squares matches all the possible revealable squares, so you win.
+                alert("you win");
+                game_running = false;
+            }
+            switch (value) {
+                case "10":
+                    $(this).addClass("open_red_bomb")
+                    game_running = false;
+                    break;
+                case "0":
+                    $(this).addClass("open0")
+                    var x = $(this).attr("x");
+                    var y = $(this).attr("y");
+                    // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
+                    open_neighbors(x, y);
+                    break;
+                case "1":
+                    $(this).addClass("open1")
+                    break;
+                case "2":
+                    $(this).addClass("open2")
+                    break;
+                case "3":
+                    $(this).addClass("open3")
+                    break;
+                case "4":
+                    $(this).addClass("open4")
+                    break;
+                case "5":
+                    $(this).addClass("open5")
+                    break;
+                case "6":
+                    $(this).addClass("open6")
+                    break;
+                case "7":
+                    $(this).addClass("open7")
+                    break;
+                case "8":
+                    $(this).addClass("open8")
+                    break;
 
-        // alert($(this).attr("content"));
-        //console.log(this);
-        $(this).removeClass("game_square_closed");
-        $(this).addClass("game_square");
-    
-        //debugger;
-        var value = $(this).attr("content");
-    
-        switch (value) {
-            case "0":
-                $(this).addClass("open0")
-                break;
-            case "1":
-                $(this).addClass("open1")
-                break;
-            case "2":
-                $(this).addClass("open2")
-                break;
-            case "3":
-                $(this).addClass("open3")
-                break;
-            case "4":
-                $(this).addClass("open4")
-                break;
-            case "5":
-                $(this).addClass("open5")
-                break;
-            case "10":
-                $(this).addClass("open_red_bomb")
-                break;
-            default:
-                break;
+                default:
+                    break;
+            }
         }
-    
-    
     })
-    
-    
-        $(document).on("click",".btn-new-game",function(){
+
+
+    $(document).on("click", ".btn-new-game", function () {
         start_game();
-    
-    
+
+
     })
-    
-    
-    //$(".game_square_closed").on("contextmenu", function () {
-        $(document).on("contextmenu",".game_square_closed",function(){
+
+
+    $(document).on("contextmenu", ".game_square_closed", function () {
         event.preventDefault();  //prevent the browser context menu from popping up
-    
-    
+
+
         if ($(this).attr("flag") == "true") {
             $(this).attr("flag", false);
             $(this).attr("question", true);
             $(this).addClass("closed_question");
             $(this).removeClass("closed_flag");
-    
+
         } else if ($(this).attr("question") == "true") {
             $(this).attr("flag", false);
             $(this).attr("question", false);
             $(this).addClass("closed_question");
             $(this).removeClass("closed_question");
-    
+
         } else {
             $(this).attr("flag", true);
             $(this).attr("question", false);
             $(this).addClass("closed_flag");
             $(this).removeClass("closed_question");
-    
+
         }
-    
+
     })
 });
 
 function start_game() {
-    board_array=[];
+    game_running = true;
+    board_array = [];
     index = 0;
     board_array = Create2DArray(board_size, board_size);  //blank
     build_blank_array(board_size);          //initing to zeros
@@ -108,6 +128,16 @@ function start_game() {
 
 }
 
+
+function open_neighbors(x, y) {
+    // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
+    console.log("opening squares at: " + x + " and " + y);
+    //$("ul").find(`[data-slide='${current}']`)
+    let x_column = $("div").find(`[x='${x}']`);
+    console.log(x_column);
+    let this_div = $(x_column.game_square).find(`[y='${y}']`);
+    console.log(this_div);
+}
 
 function place_numbers(size) {
     //for each square, go around each of the 9 surrounding squares.
@@ -178,7 +208,6 @@ function place_numbers(size) {
 }
 
 
-
 function build_blank_array(size) {
     var new_row;
     var new_square;
@@ -194,6 +223,8 @@ function place_bombs(size) {
     var new_row;
     var new_square;
     var this_bomb;
+    bomb_count = 0;
+    blanks_count = size * size;
     //first randomly place (size*size)*density bombs.  Then based on that place
     //numbers.
     //this isn't quite right since it will place a random number, centered on the right
@@ -203,14 +234,14 @@ function place_bombs(size) {
             this_bomb = Math.random() * board_size * board_size;
             if (this_bomb < bomb_number) {
                 board_array[x][y] = 10;
+                bomb_count++;
+                blanks_count--;
                 index++;
             }
         }
     }
+
 }
-
-
-
 
 
 function build_board(size) {

@@ -87,6 +87,14 @@
     background-size: 100% 100%;
 }
 
-/* .game_board{
+.game_board{
+   height: 500px;
+   width:500px;
+  
+}
+
+.game_board_row{
+    height: 500px;
+    width:500px;
    
-} */
+}
