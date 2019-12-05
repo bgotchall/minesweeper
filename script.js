@@ -148,50 +148,80 @@ function open_neighbors(x, y) {
     // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
     console.log("opening squares at: " + parseInt(x) + " and " + parseInt(y));
     //this is where I was leaving off.  There is something about how I am handling the recursion that isn't quite working.
-     debugger;
-    if ((parseInt(x) < board_size - 1) && (parseInt(y) < board_size - 1) && (parseInt(x) > -1) && (parseInt(y) > -1)) {
-        
-       
+     //debugger;
 
-
-        //has 0=blank, 1=flag, 2=question, 3 open
-
-        if ((board_array[parseInt(x) - 1][parseInt(y) - 1] == 0) && (flag_array[parseInt(x) - 1][parseInt(y) - 1] != 3)) {
-            flag_array[parseInt(x) - 1][parseInt(y) - 1] = 3;
-            open_neighbors(parseInt(x) - 1, parseInt(y) - 1);
-        } else if ((board_array[parseInt(x) - 1][parseInt(y)] == 0) && (flag_array[parseInt(x) - 1][parseInt(y)] != 3)) {
-            
-            flag_array[parseInt(x) - 1][parseInt(y)] = 3;
-            open_neighbors(parseInt(x) - 1, parseInt(y));
-        } else if ((board_array[parseInt(x) - 1][parseInt(y) + 1] == 0) && (flag_array[parseInt(x) - 1][parseInt(y) + 1] != 3)) {
-            
-            flag_array[parseInt(x) - 1][parseInt(y) + 1] = 3;
-            open_neighbors(parseInt(x) - 1, parseInt(y) + 1);
-        } else if ((board_array[parseInt(x)][parseInt(y) - 1] == 0) && (flag_array[parseInt(x)][parseInt(y) - 1] != 3)) {
-            
-            flag_array[parseInt(x)][parseInt(y) - 1] = 3;
-            open_neighbors(parseInt(x), parseInt(y) - 1);
-        } else if ((board_array[parseInt(x)][parseInt(y) + 1] == 0) && (flag_array[parseInt(x)][parseInt(y) + 1] != 3)) {
-            
-            flag_array[parseInt(x)][parseInt(y) + 1] = 3;
-            open_neighbors(parseInt(x), parseInt(y) + 1);
-        } else if ((board_array[parseInt(x) + 1][parseInt(y) - 1] == 0) && (flag_array[parseInt(x) + 1][parseInt(y) - 1] != 3)) {
-            
-            flag_array[parseInt(x) + 1][parseInt(y) - 1] = 3;
-            open_neighbors(parseInt(x) + 1, parseInt(y) - 1);
-        } else if ((board_array[parseInt(x) + 1][parseInt(y)] == 0) && (flag_array[parseInt(x) + 1][parseInt(y)] != 3)) {
-            
-            flag_array[parseInt(x) + 1][parseInt(y)] = 3;
-            open_neighbors(parseInt(x) + 1, parseInt(y));
-        } else if ((board_array[parseInt(x) + 1][parseInt(y) + 1] == 0) && (flag_array[parseInt(x) + 1][parseInt(y) + 1] != 3)) {
-            
-            flag_array[parseInt(x) + 1][parseInt(y) + 1] = 3;
-            open_neighbors(parseInt(x) + 1, parseInt(y) + 1);
-        }
-    }
-    //I htink this is the problem:  these need to check if they are non-zero, or it prevents the recursive call?
     var x_coord;
     var y_coord;
+    x_coord=parseInt(x);
+    y_coord=parseInt(y);
+    if ((x_coord < board_size) && (y_coord < board_size) && (x_coord > -1) && (y_coord > -1)) {
+        
+
+        //has 0=blank, 1=flag, 2=question, 3 open
+        x_coord=parseInt(x)-1;
+        y_coord=parseInt(y)-1;
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        } 
+        x_coord=parseInt(x)-1;
+        y_coord=parseInt(y);
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        } 
+        x_coord=parseInt(x)-1;
+        y_coord=parseInt(y)+1;
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord ,y_coord);
+        } 
+        x_coord=parseInt(x);
+        y_coord=parseInt(y)-1;
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        } 
+        x_coord=parseInt(x);
+        y_coord=parseInt(y)+1;
+         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        } 
+        x_coord=parseInt(x)+1;
+        y_coord=parseInt(y)-1;
+         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        } 
+        x_coord=parseInt(x)+1;
+        y_coord=parseInt(y);
+         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        } 
+        x_coord=parseInt(x)+1;
+        y_coord=parseInt(y)+1;
+         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+            
+            flag_array[x_coord][y_coord] = 3;
+            redraw_board(board_size);
+            open_neighbors(x_coord, y_coord);
+        }
+    }
+    //now all neighbors with zero have been cleared.  Now clear the non-zero neighbors:
+   
     x_coord = parseInt(x) - 1;
     y_coord = parseInt(y) - 1;
     flag_array[x_coord][y_coord] = 3;
