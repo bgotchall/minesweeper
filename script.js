@@ -8,6 +8,8 @@
 // cover everything with grey.  Then a click returns the x,y and the block is
 // recolored as a bomb or number.  The hard part will be recursively uncovering
 // neighboring blank squares...
+//if the first click is a bomb, quietly redraw the board until the first coordinate is a zero,
+//which is the behavior the PC game had, to prevent the first click from being an instant loss.
 
 
 var bomb_density = .2;
@@ -19,6 +21,10 @@ var index = 0;
 var board_array;
 var flag_array;         //same size as the board array.  has 0=blank, 1=flag, 2=question, 3 open
 var game_running = true;              //false if you have died.
+var first_click = true;              //this tracks if the first "mulligan"click has happened yet.
+var x;
+var y;
+const debug_flag=false;
 
 $(document).ready(function () {
     //debugger;
@@ -26,15 +32,41 @@ $(document).ready(function () {
 
     $(document).on("click", ".game_square_closed", function () {
         if (game_running) {
-            //blanks_count++;
+            x = $(this).attr("x");
+            y = $(this).attr("y");
+            x = parseInt(x);
+            y = parseInt(y);
+            if (first_click) {
+                //for the first click of the game, the clicked cell should be a zero.  force it to be zero by clearing bombs from this cell
+                //and all neighbors.
+                first_click = false;
+                var value = $(this).attr("content");
+
+                //debugger;
+                board_array[x - 1][y - 1] = 0;
+                board_array[x - 1][y] = 0;
+                board_array[x - 1][y + 1] = 0;
+                board_array[x][y - 1] = 0;
+                board_array[x][y] = 0;
+
+                $(this).attr("content", "0");
+                board_array[x][y + 1] = 0;
+                board_array[x + 1][y - 1] = 0;
+                board_array[x + 1][y] = 0;;
+                board_array[x + 1][y + 1] = 0;
+
+                place_numbers(board_size);
+                build_board(board_size);
+            }
+
+
             $(this).removeClass("game_square_closed");
             $(this).addClass("game_square");
-            var x = $(this).attr("x");
-            var y = $(this).attr("y");
+
             flag_array[x][y] = 3;         //left click is opened.
 
             // debugger;
-            var value = $(this).attr("content");
+            value = $(this).attr("content");
             if (value != "10") { blanks_count--; }
             if (blanks_count == 0) {
                 //here the revealed squares matches all the possible revealable squares, so you win.
@@ -51,7 +83,7 @@ $(document).ready(function () {
                 case "0":
                     $(this).addClass("open0")
                     // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
-                    open_neighbors(parseInt(x),parseInt( y));
+                    open_neighbors(parseInt(x), parseInt(y));
                     break;
                 case "1":
                     $(this).addClass("open1")
@@ -82,7 +114,7 @@ $(document).ready(function () {
                     break;
             }
         }
-       // console.log(flag_array);
+        // console.log(flag_array);
         //console.log(board_array);
     })
 
@@ -130,6 +162,7 @@ $(document).ready(function () {
 
 function start_game() {
     game_running = true;
+    first_click = true;
     board_array = [];
     flag_array = [];
     index = 0;
@@ -138,7 +171,7 @@ function start_game() {
     build_blank_array(board_size);          //initing to zeros
     place_bombs(board_size);                //randomly place bombs
     //debugger;
-    place_numbers(board_size);              //numbers
+    //place_numbers(board_size);              //don't actually place numbers until the first click has happened.
     build_board(board_size);
 
 }
@@ -148,80 +181,80 @@ function open_neighbors(x, y) {
     // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
     console.log("opening squares at: " + parseInt(x) + " and " + parseInt(y));
     //this is where I was leaving off.  There is something about how I am handling the recursion that isn't quite working.
-     //debugger;
+    //debugger;
 
     var x_coord;
     var y_coord;
-    x_coord=parseInt(x);
-    y_coord=parseInt(y);
+    x_coord = parseInt(x);
+    y_coord = parseInt(y);
     if ((x_coord < board_size) && (y_coord < board_size) && (x_coord > -1) && (y_coord > -1)) {
-        
+
 
         //has 0=blank, 1=flag, 2=question, 3 open
-        x_coord=parseInt(x)-1;
-        y_coord=parseInt(y)-1;
+        x_coord = parseInt(x) - 1;
+        y_coord = parseInt(y) - 1;
         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
-        } 
-        x_coord=parseInt(x)-1;
-        y_coord=parseInt(y);
+        }
+        x_coord = parseInt(x) - 1;
+        y_coord = parseInt(y);
         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
-        } 
-        x_coord=parseInt(x)-1;
-        y_coord=parseInt(y)+1;
+        }
+        x_coord = parseInt(x) - 1;
+        y_coord = parseInt(y) + 1;
         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
-            open_neighbors(x_coord ,y_coord);
-        } 
-        x_coord=parseInt(x);
-        y_coord=parseInt(y)-1;
+            open_neighbors(x_coord, y_coord);
+        }
+        x_coord = parseInt(x);
+        y_coord = parseInt(y) - 1;
         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
-            
+
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
-        } 
-        x_coord=parseInt(x);
-        y_coord=parseInt(y)+1;
-         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
-            
+        }
+        x_coord = parseInt(x);
+        y_coord = parseInt(y) + 1;
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
-        } 
-        x_coord=parseInt(x)+1;
-        y_coord=parseInt(y)-1;
-         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
-            
+        }
+        x_coord = parseInt(x) + 1;
+        y_coord = parseInt(y) - 1;
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
-        } 
-        x_coord=parseInt(x)+1;
-        y_coord=parseInt(y);
-         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
-            
+        }
+        x_coord = parseInt(x) + 1;
+        y_coord = parseInt(y);
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
-        } 
-        x_coord=parseInt(x)+1;
-        y_coord=parseInt(y)+1;
-         if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
-            
+        }
+        x_coord = parseInt(x) + 1;
+        y_coord = parseInt(y) + 1;
+        if ((board_array[x_coord][y_coord] == 0) && (flag_array[x_coord][y_coord] != 3)) {
+
             flag_array[x_coord][y_coord] = 3;
             redraw_board(board_size);
             open_neighbors(x_coord, y_coord);
         }
     }
     //now all neighbors with zero have been cleared.  Now clear the non-zero neighbors:
-   
+
     x_coord = parseInt(x) - 1;
     y_coord = parseInt(y) - 1;
     flag_array[x_coord][y_coord] = 3;
@@ -248,11 +281,12 @@ function open_neighbors(x, y) {
     flag_array[x_coord][y_coord] = 3;
 
     redraw_board(board_size);
-    
+
 
 }
 
 function place_numbers(size) {
+    //here the bombs (10's)have been placed.  build up the number hints around those bombs.
     //for each square, go around each of the 9 surrounding squares.
     //add up an index and place that number in the square.
     var new_row;
@@ -374,7 +408,7 @@ function build_board(size) {
             $(new_square).attr("content", board_array[x][y]);
             $(new_square).attr("flag", false);
             $(new_square).attr("question", false);
-            $(new_square).text(board_array[x][y]+" "+x+","+y);
+            if (debug_flag){$(new_square).text(board_array[x][y] + " " + x + "," + y)};
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -444,7 +478,7 @@ function redraw_board(size) {
                 }
             }
 
-            $(new_square).text(board_array[x][y]+" "+x+","+y);
+            if (debug_flag){$(new_square).text(board_array[x][y] + " " + x + "," + y)};
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
