@@ -344,7 +344,7 @@ function build_board(size) {
             $(new_square).attr("content", board_array[x][y]);
             $(new_square).attr("flag", false);
             $(new_square).attr("question", false);
- //           $(new_square).text(board_array[x][y]+" "+x+","+y);
+            $(new_square).text(board_array[x][y]+" "+x+","+y);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -414,7 +414,7 @@ function redraw_board(size) {
                 }
             }
 
-     //       $(new_square).text(board_array[x][y]+" "+x+","+y);
+            $(new_square).text(board_array[x][y]+" "+x+","+y);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
