@@ -10,10 +10,11 @@
 // neighboring blank squares...
 //if the first click is a bomb, quietly redraw the board until the first coordinate is a zero,
 //which is the behavior the PC game had, to prevent the first click from being an instant loss.
+//needs better loss condition:  if you click a bomb, then remainder of the board needs to be exposed, with "white"bombs for unclicked bombs.
 
 
 var bomb_density = .2;
-var board_size = 15;
+var board_size = 10;
 var bomb_number = Math.round(board_size * board_size * bomb_density);
 var bomb_count;         //in this imp the actual number might vary
 var blanks_count;       //once all the squares are opened except for bombs, you win.
@@ -43,6 +44,8 @@ $(document).ready(function () {
                 var value = $(this).attr("content");
 
                 //debugger;
+                //bomb count and blank count need to be properly updated here.  as it is, this unconditional changing is messing up 
+                //the victory condition
                 board_array[x - 1][y - 1] = 0;
                 board_array[x - 1][y] = 0;
                 board_array[x - 1][y + 1] = 0;
