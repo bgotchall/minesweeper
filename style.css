@@ -1,6 +1,7 @@
 .game_square{
-    height:40px;
-    width:40px;
+    size:5px;
+    height:80px;
+    width:80px;
     padding:0px;
     padding-top:5px;
     text-align: center;
@@ -88,13 +89,13 @@
 }
 
 .game_board{
-   height: 500px;
-   width:500px;
+   height: 1000px;
+   width:1000px;
   
 }
 
 .game_board_row{
-    height: 500px;
-    width:500px;
+    height: 1000px;
+    width:1000px;
    
 }

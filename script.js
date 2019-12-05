@@ -31,7 +31,7 @@ $(document).ready(function () {
             $(this).addClass("game_square");
             var x = $(this).attr("x");
             var y = $(this).attr("y");
-            flag_array[x][y]=3;         //left click is opened.
+            flag_array[x][y] = 3;         //left click is opened.
 
             // debugger;
             var value = $(this).attr("content");
@@ -46,12 +46,12 @@ $(document).ready(function () {
                 case "10":
                     $(this).addClass("open_red_bomb")
                     game_running = false;
-                     //reveal the rest of the board now...
+                    //reveal the rest of the board now...
                     break;
                 case "0":
                     $(this).addClass("open0")
                     // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
-                    open_neighbors(x, y);
+                    open_neighbors(parseInt(x),parseInt( y));
                     break;
                 case "1":
                     $(this).addClass("open1")
@@ -82,8 +82,8 @@ $(document).ready(function () {
                     break;
             }
         }
-        console.log(flag_array);
-        console.log(board_array);
+       // console.log(flag_array);
+        //console.log(board_array);
     })
 
 
@@ -96,27 +96,28 @@ $(document).ready(function () {
 
     $(document).on("contextmenu", ".game_square_closed", function () {
         event.preventDefault();  //prevent the browser context menu from popping up
+        //debugger;
         var x;
         var y;
-        x=$(this).attr("x");
-        y=$(this).attr("y");
+        x = $(this).attr("x");
+        y = $(this).attr("y");
 
         if ($(this).attr("flag") == "true") {
-            flag_array[x][y]=2;
+            flag_array[x][y] = 2;
             $(this).attr("flag", false);
             $(this).attr("question", true);
             $(this).addClass("closed_question");
             $(this).removeClass("closed_flag");
 
         } else if ($(this).attr("question") == "true") {
-            flag_array[x][y]=0;
+            flag_array[x][y] = 0;
             $(this).attr("flag", false);
             $(this).attr("question", false);
             $(this).addClass("closed_question");
             $(this).removeClass("closed_question");
 
         } else {
-            flag_array[x][y]=1;
+            flag_array[x][y] = 1;
             $(this).attr("flag", true);
             $(this).attr("question", false);
             $(this).addClass("closed_flag");
@@ -130,10 +131,10 @@ $(document).ready(function () {
 function start_game() {
     game_running = true;
     board_array = [];
-    flag_array=[];
+    flag_array = [];
     index = 0;
-    board_array = Create2DArray(board_size, board_size);  //blank
-    flag_array = Create2DArray(board_size, board_size);  //blank
+    board_array = Create2DArray(board_size + 1, board_size + 1);  //blank
+    flag_array = Create2DArray(board_size + 1, board_size + 1);  //blank
     build_blank_array(board_size);          //initing to zeros
     place_bombs(board_size);                //randomly place bombs
     //debugger;
@@ -145,16 +146,80 @@ function start_game() {
 
 function open_neighbors(x, y) {
     // a blank square has been opened.  By def, no neighbor is a bomb.  Now, recursively reveal all neighboring non-bomb squares.
-    console.log("opening squares at: " + x + " and " + y);
+    console.log("opening squares at: " + parseInt(x) + " and " + parseInt(y));
+    //this is where I was leaving off.  There is something about how I am handling the recursion that isn't quite working.
+     debugger;
+    if ((parseInt(x) < board_size - 1) && (parseInt(y) < board_size - 1) && (parseInt(x) > -1) && (parseInt(y) > -1)) {
+        
+       
 
-    flag_array[x][y]=3;
+
+        //has 0=blank, 1=flag, 2=question, 3 open
+
+        if ((board_array[parseInt(x) - 1][parseInt(y) - 1] == 0) && (flag_array[parseInt(x) - 1][parseInt(y) - 1] != 3)) {
+            flag_array[parseInt(x) - 1][parseInt(y) - 1] = 3;
+            open_neighbors(parseInt(x) - 1, parseInt(y) - 1);
+        } else if ((board_array[parseInt(x) - 1][parseInt(y)] == 0) && (flag_array[parseInt(x) - 1][parseInt(y)] != 3)) {
+            
+            flag_array[parseInt(x) - 1][parseInt(y)] = 3;
+            open_neighbors(parseInt(x) - 1, parseInt(y));
+        } else if ((board_array[parseInt(x) - 1][parseInt(y) + 1] == 0) && (flag_array[parseInt(x) - 1][parseInt(y) + 1] != 3)) {
+            
+            flag_array[parseInt(x) - 1][parseInt(y) + 1] = 3;
+            open_neighbors(parseInt(x) - 1, parseInt(y) + 1);
+        } else if ((board_array[parseInt(x)][parseInt(y) - 1] == 0) && (flag_array[parseInt(x)][parseInt(y) - 1] != 3)) {
+            
+            flag_array[parseInt(x)][parseInt(y) - 1] = 3;
+            open_neighbors(parseInt(x), parseInt(y) - 1);
+        } else if ((board_array[parseInt(x)][parseInt(y) + 1] == 0) && (flag_array[parseInt(x)][parseInt(y) + 1] != 3)) {
+            
+            flag_array[parseInt(x)][parseInt(y) + 1] = 3;
+            open_neighbors(parseInt(x), parseInt(y) + 1);
+        } else if ((board_array[parseInt(x) + 1][parseInt(y) - 1] == 0) && (flag_array[parseInt(x) + 1][parseInt(y) - 1] != 3)) {
+            
+            flag_array[parseInt(x) + 1][parseInt(y) - 1] = 3;
+            open_neighbors(parseInt(x) + 1, parseInt(y) - 1);
+        } else if ((board_array[parseInt(x) + 1][parseInt(y)] == 0) && (flag_array[parseInt(x) + 1][parseInt(y)] != 3)) {
+            
+            flag_array[parseInt(x) + 1][parseInt(y)] = 3;
+            open_neighbors(parseInt(x) + 1, parseInt(y));
+        } else if ((board_array[parseInt(x) + 1][parseInt(y) + 1] == 0) && (flag_array[parseInt(x) + 1][parseInt(y) + 1] != 3)) {
+            
+            flag_array[parseInt(x) + 1][parseInt(y) + 1] = 3;
+            open_neighbors(parseInt(x) + 1, parseInt(y) + 1);
+        }
+    }
+    //I htink this is the problem:  these need to check if they are non-zero, or it prevents the recursive call?
+    var x_coord;
+    var y_coord;
+    x_coord = parseInt(x) - 1;
+    y_coord = parseInt(y) - 1;
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x) - 1;
+    y_coord = parseInt(y);
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x) - 1;
+    y_coord = parseInt(y) + 1;
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x);
+    y_coord = parseInt(y) - 1;
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x);
+    y_coord = parseInt(y) + 1;
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x) + 1;
+    y_coord = parseInt(y) - 1;
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x) + 1;
+    y_coord = parseInt(y);
+    flag_array[x_coord][y_coord] = 3;
+    x_coord = parseInt(x) + 1;
+    y_coord = parseInt(y) + 1;
+    flag_array[x_coord][y_coord] = 3;
 
     redraw_board(board_size);
-    // //$("ul").find(`[data-slide='${current}']`)
-    // let x_column = $("div").find(`[x='${x}']`);
-    // console.log(x_column);
-    // let this_div = $("div").find(`[y='${y}']`);
-    // console.log(this_div);
+    
+
 }
 
 function place_numbers(size) {
@@ -233,7 +298,7 @@ function build_blank_array(size) {
     for (var y = 0; y < size; y++) {
         for (var x = 0; x < size; x++) {
             board_array[x][y] = 0;        //0-9 is neighbors.  10 is a bomb
-            flag_array[x][y]=0;             //0 is unflagged, 1 is flag,2 is question
+            flag_array[x][y] = 0;             //0 is unflagged, 1 is flag,2 is question
         }
     }
 }
@@ -273,13 +338,13 @@ function build_board(size) {
         for (var x = 0; x < size; x++) {
             new_square = $("<div></div>");
             $(new_square).addClass("col game_square_closed game_square");
-          //  $(new_square).removeClass("open0 open1 open2 open3 open4 open5 open6 open7 open8");
+            //  $(new_square).removeClass("open0 open1 open2 open3 open4 open5 open6 open7 open8");
             $(new_square).attr("x", x);
             $(new_square).attr("y", y);
             $(new_square).attr("content", board_array[x][y]);
             $(new_square).attr("flag", false);
             $(new_square).attr("question", false);
-            $(new_square).text(board_array[x][y]);
+ //           $(new_square).text(board_array[x][y]+" "+x+","+y);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -287,8 +352,8 @@ function build_board(size) {
 }
 
 function redraw_board(size) {
-//redraw the whole board based on the arrays.
-//this is because it is easier to just redraw than try to find a certain div of a certain coordinate
+    //redraw the whole board based on the arrays.
+    //this is because it is easier to just redraw than try to find a certain div of a certain coordinate
     var new_row;
     var new_square;
     //debugger;
@@ -306,50 +371,50 @@ function redraw_board(size) {
             //0=blank, 1=flag, 2=question, 3=open
             $(new_square).attr("flag", false);
             $(new_square).attr("question", false);
-            if (flag_array[x][y]==0){
-                $(new_square).attr("flag", true);
+            if (flag_array[x][y] == 0) {
+                $(new_square).attr("flag", false);
                 $(new_square).addClass("game_square_closed")
-            }else if (flag_array[x][y]==1){
+            } else if (flag_array[x][y] == 1) {
                 $(new_square).attr("flag", true);
                 $(new_square).addClass("closed_flag")
-            } else if (flag_array[x][y]==2){
+            } else if (flag_array[x][y] == 2) {
                 $(new_square).attr("question", true);
                 $(new_square).addClass("closed_question")
-            } else if (flag_array[x][y]==3){
-               // debugger;
+            } else if (flag_array[x][y] == 3) {
+                // debugger;
                 //if it is open, apply the open class:
-                switch(board_array[x][y]){
-                case 0:
-                    $(new_square).addClass("open0")
-                    break;
-                case 1:
-                    $(new_square).addClass("open1")
-                    break;
-                case 2:
-                    $(new_square).addClass("open2")
-                    break;
-                case 3:
-                    $(new_square).addClass("open3")
-                    break;
-                case 4:
-                    $(new_square).addClass("open4")
-                    break;
-                case 5:
-                    $(new_square).addClass("open5")
-                    break;
-                case 6:
-                    $(new_square).addClass("open6")
-                    break;
-                case 7:
-                    $(new_square).addClass("open7")
-                    break;
-                case 8:
-                    $(new_square).addClass("open8")
-                    break;
+                switch (board_array[x][y]) {
+                    case 0:
+                        $(new_square).addClass("open0")
+                        break;
+                    case 1:
+                        $(new_square).addClass("open1")
+                        break;
+                    case 2:
+                        $(new_square).addClass("open2")
+                        break;
+                    case 3:
+                        $(new_square).addClass("open3")
+                        break;
+                    case 4:
+                        $(new_square).addClass("open4")
+                        break;
+                    case 5:
+                        $(new_square).addClass("open5")
+                        break;
+                    case 6:
+                        $(new_square).addClass("open6")
+                        break;
+                    case 7:
+                        $(new_square).addClass("open7")
+                        break;
+                    case 8:
+                        $(new_square).addClass("open8")
+                        break;
                 }
             }
-           
-            //$(new_square).text(board_array[x][y]);
+
+     //       $(new_square).text(board_array[x][y]+" "+x+","+y);
             $(new_row).append(new_square);
         }
         $(".game_board").append(new_row);
@@ -372,7 +437,7 @@ function createArray(length) {
 function Create2DArray(rows) {
     var arr = [];
 
-    for (var i = 0; i < rows; i++) {
+    for (var i = -1; i < rows; i++) {
         arr[i] = [];
     }
 
